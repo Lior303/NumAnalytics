@@ -94,4 +94,12 @@ class Polynom(object):
         
 
 if __name__ == '__main__':
-    pass
+    p1 = Polynom("x^2 -2")
+    print(p1)
+    print('-----------')
+    print(p1.derive())
+    print('-----------')
+    print(p1)
+    print('-----------')
+    print(p1.getRootsByHalf())
+    print('-----------')
