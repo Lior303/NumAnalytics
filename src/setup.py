@@ -6,7 +6,7 @@ Created on Oct 30, 2018
 from setuptools import setup, find_packages
 
 setup(
-    name='PolynomHalf',
+    name='NumAnalytics',
     version='0.1',
     packages=find_packages(exclude=['test']),
     license='',
