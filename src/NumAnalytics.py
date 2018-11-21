@@ -6,6 +6,7 @@ Created on Oct 30, 2018
 from numpy.lib.polynomial import poly1d, polyval,polyder
 from builtins import str
 import re
+import numpy as np
 from numpy.ma.core import arange
 
 class Polynom(object):
@@ -92,14 +93,51 @@ class Polynom(object):
         return roots
                 
         
-
+class Matrix(np.matrix):
+    def __init__(self,*arg):
+        super().__init__()
+        
+    def decomposeDLU(self):
+        """
+        returns a tuple (d,l,u);
+        d = direct/ main axis of the matrix: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[1,0,0],[0,5,0],[0,0,9]])
+        l = lower matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,2,3],[0,0,6],[0,0,0]])
+        u = upper matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,0,0],[4,0,0],[7,8,0]])
+        (d+l+u)= m 
+        """
+        rows, cols = self.shape
+        if rows!=cols:
+            return None;
+        data = self.tolist()
+        direct = Matrix([[data[i][j] if i==j else 0 for j in range(cols)] for i in range(rows)])
+        lower = Matrix([[data[i][j] if j>i else 0 for j in range(cols)] for i in range(rows)])
+        upper = Matrix([[data[i][j] if j<i else 0 for j in range(cols)] for i in range(rows)])
+        return (direct, lower, upper)
+    
+    def interationSolver(self,result=None,g=None,h=None,startingGuess=None,maxError=0.01):
+        matrixDegree = self.shape[0]
+        startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
+        result = Matrix([[i] for i in result]) if not isinstance(result, Matrix) else result
+        
+        def iteration():
+            i,currGuess=0,startingGuess
+            nextGuess = g*currGuess + h*result
+            
+            
+        
+            
+        
 if __name__ == '__main__':
-    p1 = Polynom("x^2 -2")
-    print(p1)
-    print('-----------')
-    print(p1.derive())
-    print('-----------')
-    print(p1)
-    print('-----------')
-    print(p1.getRootsByHalf())
-    print('-----------')
+#     p1 = Polynom("x^2 -2")
+#     print(p1)
+#     print('-----------')
+#     print(p1.derive())
+#     print('-----------')
+#     print(p1)
+#     print('-----------')
+#     print(p1.getRootsByHalf())
+#     print('-----------')
+    m1 = Matrix('[1,2,3;4,5,6;7,8,9]')
+#     [print(x,'\n') for x in m1.decomposeDLU()]
+#     print(sum(m1.decomposeDLU()))
+print(m1.interationSolver([1,1,1]))
