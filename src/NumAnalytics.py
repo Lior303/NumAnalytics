@@ -97,36 +97,62 @@ class Matrix(np.matrix):
     def __init__(self,*arg):
         super().__init__()
         
-    def decomposeDLU(self):
+    def decomposeDLU(self,type =''):
         """
-        returns a tuple (d,l,u);
-        d = direct/ main axis of the matrix: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[1,0,0],[0,5,0],[0,0,9]])
-        l = lower matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,2,3],[0,0,6],[0,0,0]])
-        u = upper matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,0,0],[4,0,0],[7,8,0]])
+        D = direct/ main axis of the matrix: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[1,0,0],[0,5,0],[0,0,9]])
+        L = lower matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,2,3],[0,0,6],[0,0,0]])
+        U = upper matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,0,0],[4,0,0],[7,8,0]])
         (d+l+u)= m 
+        LU = L+U
+        DL = D+L
         """
         rows, cols = self.shape
         if rows!=cols:
             return None;
+        methods = {
+            'D':(lambda:Matrix([[data[i][j] if i==j else 0 for j in range(cols)] for i in range(rows)])),
+            'U':(lambda:Matrix([[data[i][j] if j<i else 0 for j in range(cols)] for i in range(rows)])),
+            'L':(lambda:Matrix([[data[i][j] if j>i else 0 for j in range(cols)] for i in range(rows)])),
+            'LU':(lambda:Matrix([[data[i][j] if i!=j else 0 for j in range(cols)] for i in range(rows)])),
+            'DL':(lambda:Matrix([[data[i][j] if i<=j else 0 for j in range(cols)] for i in range(rows)])),
+            }
         data = self.tolist()
-        direct = Matrix([[data[i][j] if i==j else 0 for j in range(cols)] for i in range(rows)])
-        lower = Matrix([[data[i][j] if j>i else 0 for j in range(cols)] for i in range(rows)])
-        upper = Matrix([[data[i][j] if j<i else 0 for j in range(cols)] for i in range(rows)])
-        return (direct, lower, upper)
+        if(re.fullmatch('(LU|D)',type, flags=re.IGNORECASE)):
+            return (methods['LU'](),methods['D']())
+        if(re.fullmatch('(DL|U)',type, flags=re.IGNORECASE)):
+            return (methods['DL'](),methods['U']())
+        return (methods['D'](),methods['L'](),methods['U']())
     
-    def interationSolver(self,result=None,g=None,h=None,startingGuess=None,maxError=0.01):
+    def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.01):
         matrixDegree = self.shape[0]
         startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
         result = Matrix([[i] for i in result]) if not isinstance(result, Matrix) else result
         
         def iteration():
             i,currGuess=0,startingGuess
-            nextGuess = g*currGuess + h*result
-            
-            
+            while(True):
+                nextGuess = g*currGuess + h*result
+                if (abs(nextGuess - currGuess)<maxError):
+                    break
+            return nextGuess
         
-            
+        def validate(guess):
+            return abs(result - (Matrix(self) * guess)) < maxError          
         
+        guess = iteration()
+        return guess, validate(guess)
+    
+    def iterJacobi(self,result):
+        lu,d = self.decomposeDLU('LU')
+        dm1 = d.getI()
+        g,h = -dm1*lu, dm1
+        return self.iterSolver(g, h, result)
+    
+    def iterGaussSeidel(self,result):
+        dl,u = self.decomposeDLU('DL')
+        dlm1 = dl.getI()
+        g,h = -dlm1*u, dlm1
+        return self.iterSolver(g, h, result)
 if __name__ == '__main__':
 #     p1 = Polynom("x^2 -2")
 #     print(p1)
@@ -140,4 +166,5 @@ if __name__ == '__main__':
     m1 = Matrix('[1,2,3;4,5,6;7,8,9]')
 #     [print(x,'\n') for x in m1.decomposeDLU()]
 #     print(sum(m1.decomposeDLU()))
-print(m1.interationSolver([1,1,1]))
+
+print(m1.iterSolver(result=[1,1,1]))
