@@ -18,6 +18,7 @@ class Test(unittest.TestCase):
     
     def testMatrixDecompose(self):
         matrix = Matrix("[1,2;3,4]")
+        assert(matrix.decompose()==None)
         assert_not_equal(matrix.decompose('D'),matrix.decompose('U'))
         assert_equal(matrix.decompose('D'),Matrix('[1,0;0,4]'))
         assert_equal(matrix.decompose('U'),Matrix('[0,2;0,0]'))

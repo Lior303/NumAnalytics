@@ -114,48 +114,49 @@ class Matrix(np.matrix):
             'LU':(lambda:Matrix([[data[i][j] if i!=j else 0 for j in range(cols)] for i in range(rows)])),
             'DL':(lambda:Matrix([[data[i][j] if i>=j else 0 for j in range(cols)] for i in range(rows)])),
             }
-        return methods[select]()
+        return methods[select]() if select in methods else None
 
-    def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.01):
+    def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.01,**kwargs):
         matrixDegree = self.shape[0]
         startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
         result = Matrix([[i] for i in result]) if not isinstance(result, Matrix) else result
 
-        def iteration(n=25):
+        def iteration(n=25,**kwargs):
             currGuess=startingGuess
             i=1
-            while(i<n):
+            while(i<=n):
                 nextGuess = g*currGuess + h*result
                 if(abs(nextGuess - currGuess).max()<maxError):
+                    currGuess = nextGuess
                     break
                 currGuess = nextGuess
                 i+=1
-            print("done in iteration number : " , i)
-            return nextGuess
+            print("done in iteration number : " , i-1)
+            return currGuess
 
         def validate(guess):
             return abs(result - (Matrix(self) * guess)).max() < maxError
 
-        guess = iteration()
+        guess = iteration(**kwargs)
         return guess, validate(guess)
 
-    def iterJacobi(self,result):
+    def iterJacobi(self,result,**kwargs):
         lu,d = self.decompose('LU') , self.decompose('D')
         dInver = d**-1
         g = -dInver*lu
         h = dInver
-        return self.iterSolver(g, h, result)
+        return self.iterSolver(g, h, result,**kwargs)
 
-    def iterGaussSeidel(self,result):
+    def iterGaussSeidel(self,result,**kwargs):
         dl,u = self.decompose('DL') , self.decompose('U')
         dlInver = dl**-1
         g = -dlInver*u
         h = dlInver
-        return self.iterSolver(g, h, result)
+        return self.iterSolver(g, h, result,**kwargs)
 
 if __name__ == '__main__':
     m1 = Matrix('[2,1;5,7]')
-    print(m1.iterJacobi([11,13]))
+    print(m1.iterJacobi([11,13],n=25))
 #     print(m1.iterGaussSeidel([6,15,24]))
 
 
