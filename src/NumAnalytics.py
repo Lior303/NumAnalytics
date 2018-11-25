@@ -116,7 +116,7 @@ class Matrix(np.matrix):
             }
         return methods[select]() if select in methods else None
 
-    def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.01,**kwargs):
+    def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.001,**kwargs):
         matrixDegree = self.shape[0]
         startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
         result = Matrix([[i] for i in result]) if not isinstance(result, Matrix) else result
@@ -126,7 +126,7 @@ class Matrix(np.matrix):
             i=1
             while(i<=n):
                 nextGuess = g*currGuess + h*result
-                if(abs(nextGuess - currGuess).max()<maxError):
+                if(abs(nextGuess - currGuess).max()<maxError/10):
                     currGuess = nextGuess
                     break
                 currGuess = nextGuess
@@ -157,6 +157,6 @@ class Matrix(np.matrix):
 if __name__ == '__main__':
     m1 = Matrix('[2,1;5,7]')
     print(m1.iterJacobi([11,13],n=25))
-#     print(m1.iterGaussSeidel([6,15,24]))
+    print(m1.iterGaussSeidel([11,13]))
 
 
