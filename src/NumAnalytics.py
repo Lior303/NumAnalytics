@@ -8,6 +8,7 @@ from builtins import str
 import re
 import numpy as np
 from numpy.ma.core import arange
+from numpy.random.mtrand import random_sample
 
 class Polynom(object):
     @staticmethod
@@ -94,7 +95,7 @@ class Polynom(object):
 
 
 class Matrix(np.matrix):
-    def decompose(self,select =''):
+    def decompose(self,*selections):
         """
         D = direct/ main axis of the matrix: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[1,0,0],[0,5,0],[0,0,9]])
         L = lower matrix triangle: ([[1,2,3],[4,5,6],[7,8,9]]) => ([[0,2,3],[0,0,6],[0,0,0]])
@@ -114,12 +115,12 @@ class Matrix(np.matrix):
             'LU':(lambda:Matrix([[data[i][j] if i!=j else 0 for j in range(cols)] for i in range(rows)])),
             'DL':(lambda:Matrix([[data[i][j] if i>=j else 0 for j in range(cols)] for i in range(rows)])),
             }
-        return methods[select]() if select in methods else None
+        return (methods[select]() if select in methods else None for select in selections)
 
     def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.001,**kwargs):
         matrixDegree = self.shape[0]
         startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
-        result = Matrix([[i] for i in result]) if not isinstance(result, Matrix) else result
+        result = Matrix([[i] for i in result]) if not isinstance(result, np.matrix) else result
 
         def iteration(n=25,**kwargs):
             currGuess=startingGuess
@@ -141,22 +142,32 @@ class Matrix(np.matrix):
         return guess, validate(guess)
 
     def iterJacobi(self,result,**kwargs):
-        lu,d = self.decompose('LU') , self.decompose('D')
+        lu,d = self.decompose('LU','D')
         dInver = d**-1
         g = -dInver*lu
         h = dInver
         return self.iterSolver(g, h, result,**kwargs)
 
     def iterGaussSeidel(self,result,**kwargs):
-        dl,u = self.decompose('DL') , self.decompose('U')
+        dl,u = self.decompose('DL','U')
         dlInver = dl**-1
         g = -dlInver*u
         h = dlInver
         return self.iterSolver(g, h, result,**kwargs)
-
+    
+    def iterSOR(self,result,w=None,**kwargs):
+        w = 2*random_sample() if (w==None or w>2 or w<=0) else w
+        d,l,u = self.decompose('D','L','U')
+        dwlInver = (d+w*l)**-1
+        g = dwlInver * ((1-w)*d -w*u)
+        h = w * dwlInver
+        print("w: ", w)
+        return self.iterSolver(g, h, result, **kwargs)
+        
 if __name__ == '__main__':
     m1 = Matrix('[2,1;5,7]')
     print(m1.iterJacobi([11,13],n=25))
     print(m1.iterGaussSeidel([11,13]))
+    print(m1.iterSOR([11,13],n=100))
 
 
