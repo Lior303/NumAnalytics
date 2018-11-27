@@ -46,13 +46,17 @@ class Matrix(np.matrix):
                 i+=1
             print("done in iteration number : " , i-1)
             return currGuess
-
+        
+        def guessError(guess):
+            return abs(result - (self * guess)).max()
+        
         def validate(guess):
-            return abs(result - (self * guess)).max() < maxError
+            return guessError(guess) < maxError
 
         guess = iteration(**kwargs)
-        return guess, validate(guess)
-
+        print("guess error:",guessError(guess),", result guess:\n",guess,'')
+        return guess
+    
     def iterJacobi(self,result,**kwargs):
         lu,d = Matrix.decompose(self,'LU','D')
         dInver = d**-1

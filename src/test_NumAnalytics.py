@@ -4,7 +4,8 @@ Created on Oct 30, 2018
 @author: Pavel Shavarchov
 '''
 import unittest
-from NumAnalytics import *
+from matrix import *
+from polynomial_halving_method import *
 from numpy.ma.testutils import assert_equal, assert_not_equal
 
 class Test(unittest.TestCase):
