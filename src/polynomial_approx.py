@@ -1,6 +1,6 @@
 import numpy as np
 from  gaussian_elimination_method import gaussian_eliminate_result_adapter as gauss_elim
-from matrix import Matrix
+from matrix import Matrix, addKwargs
 
 def polynomial_approximation(dict, matrixSolver = gauss_elim):
     """
@@ -33,10 +33,11 @@ def polynomial_approximation(dict, matrixSolver = gauss_elim):
 
 if __name__ == '__main__':
     print("Enter a table of points of table and values of table.\nAs dictionary {<key1>:<val1>, ..., <keyn>:<valn>}:")
-    dict = eval(input())
-    polynomial_approximation(dict)
+#     dict = eval(input())
+#     polynomial_approximation(dict)
 #     print(polynomial_approximation({1:1, 10:0.1, 20:0.05}))
-#     print(polynomial_approximation({1:1, 10:0.1, 20:0.05},matrixSolver=matrix.iterGaussSeidel),)
+    solver = addKwargs(Matrix.iterGaussSeidel,n=10)
+    print(polynomial_approximation({1:1, 10:0.1, 20:0.05},matrixSolver=solver))
 
     
 """

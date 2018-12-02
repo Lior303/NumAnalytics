@@ -6,6 +6,9 @@ Created on Oct 30, 2018
 import numpy as np
 from numpy.random.mtrand import random_sample
 
+def addKwargs(func,**kwargs):
+    return lambda *args,**newkwargs : func(*args,**{**kwargs,**newkwargs})
+
 class Matrix(np.matrix):
     def decompose(self,*selections):
         """
@@ -30,29 +33,35 @@ class Matrix(np.matrix):
         return (methods[select]() if select in methods else None for select in selections)
 
     def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.001,**kwargs):
+        """
+        performs x{i+1} = g*x{i} + h*b, stops when reaches n = max iteration or reaches valid guess 
+        """
         matrixDegree = self.shape[0]
         startingGuess = Matrix([[0] for _ in range(matrixDegree)]) if startingGuess==None else startingGuess
         result = Matrix([[i] for i in result]) if not isinstance(result, np.matrix) else result
-
-        def iteration(n=25):
-            currGuess=startingGuess
-            i=1
-            while(i<=n):
-                nextGuess = g*currGuess + h*result
-                if(abs(nextGuess - currGuess).max()<maxError/100):
-                    currGuess = nextGuess
-                    break
-                currGuess = nextGuess
-                i+=1
-            print("done in iteration number : " , i-1)
-            return currGuess
         
         def guessError(guess):
             return abs(result - (self * guess)).max()
         
-        def validate(guess):
-            return guessError(guess) < maxError
-
+        def iteration(n=25):                  
+            currGuess=startingGuess
+            i=1
+            err = maxError
+            while(i<=n):
+                nextGuess = g*currGuess + h*result
+                if(abs(nextGuess - currGuess).max()<err):
+                    currGuess = nextGuess
+                    if(guessError(currGuess)<maxError):
+                        break
+                    else:
+                        print("close, but not enough; decreasing range")
+                        err = err/10
+                currGuess = nextGuess
+                i+=1
+                print("guess #{}: {}".format(i-1,currGuess.tolist()))
+            print("done in iteration number : " , i-1)
+            return currGuess
+             
         guess = iteration(**kwargs)
         print("guess error:",guessError(guess),", result guess:\n",guess,'')
         return guess
@@ -82,9 +91,8 @@ class Matrix(np.matrix):
         
 if __name__ == '__main__':
     m1 = np.matrix('[2,1;5,7]')
-    print(Matrix.iterJacobi(m1, [11,13]))
+    print(Matrix.iterJacobi(m1, [11,13],n=25))
 #     print(m1.iterJacobi([11,13],n=25))
-#     print(m1.iterGaussSeidel([11,13]))
 #     print(m1.iterSOR([11,13],n=100))
 
 

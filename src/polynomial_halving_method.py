@@ -85,6 +85,6 @@ class Polynom(np.poly1d):
         return roots
 
 if __name__ == '__main__':
-    p2 = np.poly1d([1,0,-2])
-#     print(p1,'\n', p2)
+    p2 = np.poly1d([1,1,1,-2])
+    print(p2)
     print(Polynom.getRootsHalvingMethod(p2,totalZone=(-5,5),zoneCount=25))
