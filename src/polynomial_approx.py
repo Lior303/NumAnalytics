@@ -1,8 +1,9 @@
 import numpy as np
-from  gaussian_elimination_method import gaussian_eliminate_result_adapter as gauss_elim
+from  gaussian_elimination_method import gaussian_eliminate_result_adapter
 from matrix import Matrix, addKwargs
+from polynomial_halving_method import Polynom
 
-def polynomial_approximation(dict, matrixSolver = gauss_elim):
+def polynomial_approximation(dict, matrixSolver = gaussian_eliminate_result_adapter):
     """
     :param dict: the dictionary that was given
     :return: result vector as a polynom.
@@ -28,17 +29,14 @@ def polynomial_approximation(dict, matrixSolver = gauss_elim):
     vectorX = matrixSolver(matrixA,vectorB)
     if isinstance(vectorX, np.matrix):
         vectorX = vectorX.flatten().tolist()[0]
-        print(vectorX)
     return np.poly1d(vectorX)
 
 if __name__ == '__main__':
-    print("Enter a table of points of table and values of table.\nAs dictionary {<key1>:<val1>, ..., <keyn>:<valn>}:")
-#     dict = eval(input())
-#     polynomial_approximation(dict)
-#     print(polynomial_approximation({1:1, 10:0.1, 20:0.05}))
-    solver = addKwargs(Matrix.iterGaussSeidel,n=10)
-    print(polynomial_approximation({1:1, 10:0.1, 20:0.05},matrixSolver=solver))
-
+#     solver = addKwargs(Matrix.iterSOR,n=100,w=1.5)
+    p1 = polynomial_approximation({2:-3.5, 3:1.25, 6:0.05},matrixSolver=gaussian_eliminate_result_adapter)
+    p1 = Polynom(p1)
+    print("f(3.83) = ", p1.eval(3.83))
+    
     
 """
 polynomial approximation. calculate and return the polynom from the polynomial approximation of a known dictionary (the table)

@@ -1,5 +1,6 @@
 import numpy as np
 import matrix_functions as func
+from matrix import Matrix
 
 def pivot_row(A, k):
     i_max = k
@@ -61,7 +62,9 @@ def gaussian_eliminate_result(A):
     return lst
 
 def gaussian_eliminate_result_adapter(A,b):
-    return gaussian_eliminate_result(np.append(A,b, axis=1))
+    X = gaussian_eliminate_result(np.append(A,b, axis=1))
+    print("guess error: ", Matrix.guessError(A, b, [[x] for x in X]))
+    return X
 
 
 def demo():

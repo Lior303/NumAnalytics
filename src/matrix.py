@@ -31,7 +31,10 @@ class Matrix(np.matrix):
             'DL':(lambda:Matrix([[data[i][j] if i>=j else 0 for j in range(cols)] for i in range(rows)])),
             }
         return (methods[select]() if select in methods else None for select in selections)
-
+    
+    def guessError(self,result,guess):
+            return abs(result - (self * guess)).max()
+    
     def iterSolver(self,g,h,result=None,startingGuess=None,maxError=0.001,**kwargs):
         """
         performs x{i+1} = g*x{i} + h*b, stops when reaches n = max iteration or reaches valid guess 
