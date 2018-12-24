@@ -14,6 +14,7 @@ setup(
     author_email='Shvarpa@gmail.com',
     description='Polynomial root solver by halving method',
     install_requires=[
-                        'numpy'
+                        'numpy',
+						'matplotlib'
                       ],
 )
