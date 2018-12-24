@@ -23,7 +23,7 @@ def polynomial_approximation(data, matrixSolver = gauss_elim):
 
 #     def unpackVector(vector):
 #         return vector.flatten()
-
+    
     matrixA , vectorB = createMatrix(), createResultsVector()
     vectorX = matrixSolver(matrixA,vectorB)
     if isinstance(vectorX, np.matrix):
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     solver = addKwargs(Matrix.iterGaussSeidel,n=10)
     print(polynomial_approximation({1:1, 10:0.1, 20:0.05},matrixSolver=solver))
 
-
+    
 """
 polynomial approximation. calculate and return the polynom from the polynomial approximation of a known dictionary (the table)
 first, crate the matrix using the ductionary, then create resut vector ---> it will be the values of the dictionary.
