@@ -1,5 +1,5 @@
 import numpy as np
-import matrix_functions as func
+import matrix.matrix_functions as func
 
 def pivot_row(A, k):
     i_max = k
