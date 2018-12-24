@@ -4,8 +4,8 @@ Created on Dec 3, 2018
 @author: Pavel
 '''
 import numpy as np
-from matrix import Matrix, addKwargs
-from  gaussian_elimination_method import gaussian_eliminate_result_adapter
+from matrix.matrix_iteration import Matrix, addKwargs
+from  matrix.gaussian_elimination_method import gaussian_eliminate_result_adapter
 import math
 
 def getDMatrix():

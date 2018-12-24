@@ -31,7 +31,7 @@ def newtonraphson_method(f, x0, epsilon=10**-4, nMax=100):
     return False
 
 
-if name__ == "__main__":
+if __name__ == "__main__":
     print("Enter a function f(x): ")
     func=eval("lambda x: " + input(""))
     print("Enter x0 start value: ")

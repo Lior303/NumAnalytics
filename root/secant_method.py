@@ -19,7 +19,7 @@ def secant_method(f, x0, x1, epsilon=10**-4, nMax=100):
             x1=x2
     return False
 
-if name__ == "__main__":
+if __name__ == "__main__":
     print("Enter a function f(x): ")
     func=eval("lambda x: " + input(""))
     print("Enter start values: x0 and x1")

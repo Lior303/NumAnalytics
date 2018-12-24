@@ -1,11 +1,10 @@
 import numpy as np
-from  gaussian_elimination_method import gaussian_eliminate_result_adapter
-from matrix import Matrix, addKwargs
-from polynomial_halving_method import Polynom
+from matrix.gaussian_elimination_method import gaussian_eliminate_result_adapter
+from root.polynomial_halving_method import Polynom
 
-def polynomial_approximation(dict, matrixSolver = gaussian_eliminate_result_adapter):
+def polynomial_approximation(data, matrixSolver = gaussian_eliminate_result_adapter):
     """
-    :param dict: the dictionary that was given
+    :param data: the dictionary that was given
     :return: result vector as a polynom.
     """
     def createMatrix():
@@ -13,14 +12,14 @@ def polynomial_approximation(dict, matrixSolver = gaussian_eliminate_result_adap
         create the matrix
         :return: the matrix from the dictionary
         """
-        size = len(dict.keys())
-        return np.matrix([[x ** i for i in range(size - 1, -1, -1)] for x in dict.keys()])
+        size = len(data.keys())
+        return np.matrix([[x ** i for i in range(size - 1, -1, -1)] for x in data.keys()])
 
     def createResultsVector():
         """
         :return: the resut vector
         """
-        return np.matrix([[y] for y in dict.values()])
+        return np.matrix([[y] for y in data.values()])
 
 #     def unpackVector(vector):
 #         return vector.flatten()
