@@ -74,12 +74,15 @@ def cubic_spline(data , solver = gauss ,**kwargs):
     
     return route_function(ranges,functions) 
 
-def graph(f, rng, precision = 0.1):
-    print(*rng)
-    x=numpy.arange(*rng,precision)
+def graph(f, rng, precision = 0.001):
+    x=numpy.arange(rng[0],rng[1]+precision,precision)
     y=[f(i) for i in x]
     pyplot.plot(x,y)
-    pyplot.show()
+
+def points(p):
+    x = [i[0] for i in p]
+    y = [i[1] for i in p]
+    pyplot.scatter(x, y)
 
 if __name__ == "__main__":
     data = [(0,0),(1,0.5),(2,2),(3,1.5)]
@@ -87,3 +90,5 @@ if __name__ == "__main__":
     getx = lambda elem:elem[0]
     total_range = (getx(min(data, key = getx)),getx(max(data, key = getx)))
     graph(cubic,total_range)
+    points(data)
+    pyplot.show()
