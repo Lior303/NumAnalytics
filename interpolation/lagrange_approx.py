@@ -14,6 +14,14 @@ def get_P(x, lst_y):
 def get_Polynomial(table_points):
     return lambda x:get_P(x, table_points)
 
-table_points = [(0,1), (1,0), (2,1)]
+table_points =[]
+print("Enter number of table points=")
+n=int(input())
+for i in range(n):
+    print("Enter table points:")
+    point = (float(input("x=")), float(input("y=")))
+    table_points.append(point)
 poly = get_Polynomial(table_points)
-print(poly(3))
+print("Enter the value of X0: ")
+x0 = float(input(""))
+print("The value of the polynomial at point x is: {}".format(poly(x0)))

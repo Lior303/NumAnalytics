@@ -11,8 +11,14 @@ def get_Neville(table_points):
     n=len(table_points)-1
     return lambda x: P_ij(x, 0, n, table_points)
 
-# table_points = [(0,1), (0.05, 0.951229), (0.15, 0.860708), (0.25, 0.778801)
-table_points = [(0,5), (1,2), (2,-5), (3,-10)]
-
+table_points =[]
+print("Enter number of table points=")
+n=int(input())
+for i in range(n):
+    print("Enter table points:")
+    point = (float(input("x=")), float(input("y=")))
+    table_points.append(point)
 poly = get_Neville(table_points)
-print(poly(3))
+print("Enter the value of X0: ")
+x0 = float(input(""))
+print("The value of the polynomial at point x is: {}".format(poly(x0)))
