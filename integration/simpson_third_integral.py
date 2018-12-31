@@ -1,4 +1,4 @@
-def simpsons_third(f,dom,n=2):
+def simpson_third(f,dom,n=2):
     """
     f = callable that returns a single numeric value, the function that we want to find the integral of.
     dom = the integral domain
@@ -14,12 +14,14 @@ def simpsons_third(f,dom,n=2):
         sum+= 4*f(x(i)) if i%2!=0 else 2*f(x(i))
     return h*sum/3
 
-
 if __name__=="__main__":
-    x = simpsons_third(lambda x: x**3 + 2*x -3, (0,2), n=2)
-    #integral is (x**4)/4 + x**2 -3x | between 0,2:
-    #x=2: 4 + 4 - 6 = 2 
-    #x=0: 0
-    #integral result = 2
-    #should print 2
-    print(x)
+    try:
+        from numpy import log as ln
+        i=lambda x: x*ln(x) -x
+        print(f"""integral of ln(x):
+        using simpson:     {simpson_third(lambda x:ln(x),(1,3),n=2)}
+        analitic method:   {i(3)-i(1)}
+        """)
+    except:
+        pass
+    
