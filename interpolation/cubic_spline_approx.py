@@ -57,8 +57,8 @@ def cubic_spline(data , solver = gauss ,**kwargs):
         """creates the results matrix d where each d[i] = 6*devided_difference(x[i-1],x[i],x[i+1] except for eadge cases.
         bounds represent the known first derivative of the edge cases, and are calculated accordingly 
         """
-        d0 = ([0] if not bounds else (devided_diff(data[:2]) - bounds[0])/h[1])
-        dn = ([0] if not bounds else (bounds[1] - devided_diff(data[-2:]))/h[n-1])
+        d0 = (0 if not bounds else (devided_diff(data[:2]) - bounds[0])/h[1])
+        dn = (0 if not bounds else (bounds[1] - devided_diff(data[-2:]))/h[n-1])
         d = [d0] + [devided_diff(data[i-1:i+2]) for i in range(1,n-1)] + [dn]
         d = [6*x for x in d]
         return d
@@ -103,7 +103,7 @@ def graph(f, points = None, precision = 0.001):
         print("cannot import matplotlib")
         return
     getx = lambda elem:elem[0]
-    rng = (getx(min(data, key = getx)),getx(max(data, key = getx)))
+    rng = (getx(min(points, key = getx)),getx(max(points, key = getx)))
     x=numpy.arange(rng[0],rng[1]+precision,precision)
     y=[f(i) for i in x]
     pyplot.plot(x,y)
@@ -114,8 +114,15 @@ def graph(f, points = None, precision = 0.001):
     pyplot.show()
 
 
-if __name__ == "__main__":
+def examples():
     data = [(0,0),(1,0.5),(2,2),(3,1.5)]
     cubic = cubic_spline(data = data,bounds=[0.2,-1])
     graph(cubic,points=data)
+    data = [(5,10),(-5,-1.5),(1,3),(2,2.5)]
+    cubic = cubic_spline(data = data)
+    graph(cubic,points=data)
+    
+if __name__ == "__main__":
+    examples()
+
 
