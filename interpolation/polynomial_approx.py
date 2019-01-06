@@ -21,9 +21,6 @@ def polynomial_approximation(data, matrixSolver = gaussian_eliminate_result_adap
         """
         return np.matrix([[y] for y in data.values()])
 
-#     def unpackVector(vector):
-#         return vector.flatten()
-
     matrixA , vectorB = createMatrix(), createResultsVector()
     vectorX = matrixSolver(matrixA,vectorB)
     if isinstance(vectorX, np.matrix):
@@ -31,10 +28,10 @@ def polynomial_approximation(data, matrixSolver = gaussian_eliminate_result_adap
     return np.poly1d(vectorX)
 
 if __name__ == '__main__':
-#     solver = addKwargs(Matrix.iterSOR,n=100,w=1.5)
-    p1 = polynomial_approximation({2:-3.5, 3:1.25, 6:0.05},matrixSolver=gaussian_eliminate_result_adapter)
+    p1 = polynomial_approximation({2:-3.5, 3:1.25, 6:0.05}, matrixSolver=gaussian_eliminate_result_adapter)
     p1 = Polynom(p1)
-    print("f(3.83) = ", p1.eval(3.83))
+    # Enter the x0 value here:
+    print("f(3.83) = ", p1.eval(3.83)) #x0
 
 
 """

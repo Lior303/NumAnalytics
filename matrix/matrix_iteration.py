@@ -1,16 +1,5 @@
-'''
-Created on Oct 30, 2018
-
-@author: Pavel Shavarchov
-'''
 import numpy as np
 from numpy.random.mtrand import random_sample
-
-try:
-    def addKwargs(func,**kwargs):
-        return lambda *args,**newkwargs : func(*args,**{**kwargs,**newkwargs})
-except:
-    pass
 
 class Matrix(np.matrix):
     def decompose(self,*selections):
@@ -71,7 +60,7 @@ class Matrix(np.matrix):
         guess = iteration(**kwargs)
         print("guess error:",guessError(guess),", result guess:\n",guess,'')
         return guess
-    
+
     def iterJacobi(self,result,**kwargs):
         lu,d = Matrix.decompose(self,'LU','D')
         dInver = d**-1
@@ -96,7 +85,6 @@ class Matrix(np.matrix):
         return Matrix.iterSolver(self, g, h, result, **kwargs)
         
 if __name__ == '__main__':
-    m1 = np.matrix('[2,1;5,7]')
-    Matrix.iterJacobi(m1, [11,13],n=25)
-#     m1.iterJacobi([11,13],n=25)
-#     m1.iterSOR([11,13],n=100)
+    m1 = np.matrix('[1 2 4 ; 3 2 7 ; 5 1 2 ]')
+    # Matrix.iterJacobi(m1, [1,1,1],n=25)
+    Matrix.iterSOR(m1, [1,1,1],n=100)
