@@ -70,3 +70,6 @@ def gaussian_eliminate_result_adapter(A,b):
 def demo():
     A = np.matrix("1 2 3 4; 4 5 6 7; 7 8 9 3")
     gaussian_eliminate_result(A)
+
+if __name__== "__main__":
+    demo()

@@ -6,8 +6,11 @@ Created on Oct 30, 2018
 import numpy as np
 from numpy.random.mtrand import random_sample
 
-def addKwargs(func,**kwargs):
-    return lambda *args,**newkwargs : func(*args,**{**kwargs,**newkwargs})
+try:
+    def addKwargs(func,**kwargs):
+        return lambda *args,**newkwargs : func(*args,**{**kwargs,**newkwargs})
+except:
+    pass
 
 class Matrix(np.matrix):
     def decompose(self,*selections):
@@ -94,6 +97,6 @@ class Matrix(np.matrix):
         
 if __name__ == '__main__':
     m1 = np.matrix('[2,1;5,7]')
-    print(Matrix.iterJacobi(m1, [11,13],n=25))
-#     print(m1.iterJacobi([11,13],n=25))
-#     print(m1.iterSOR([11,13],n=100))
+    Matrix.iterJacobi(m1, [11,13],n=25)
+#     m1.iterJacobi([11,13],n=25)
+#     m1.iterSOR([11,13],n=100)
