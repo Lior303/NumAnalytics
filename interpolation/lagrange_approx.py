@@ -9,12 +9,14 @@ def get_P(x, lst_y):
     sum=0
     for i in range(0,len(lst_y)):
         sum+=(get_L(table_points, i, x)*lst_y[i][1])
+        print("Current sum: {}".format(sum))
     return sum
 
 def get_Polynomial(table_points):
     return lambda x:get_P(x, table_points)
 
 table_points =[]
+# table_points = [ (8.1, 16.9446), (8.3, 17.56492), (8.6, 18.50515), (8.7, 18.82091) ]
 print("Enter number of table points=")
 n=int(input())
 for i in range(n):
@@ -24,4 +26,4 @@ for i in range(n):
 poly = get_Polynomial(table_points)
 print("Enter the value of X0: ")
 x0 = float(input(""))
-print("The value of the polynomial at point x is: {}".format(poly(x0)))
+print("\nThe value of the polynomial at point x is: {}".format(poly(x0)))

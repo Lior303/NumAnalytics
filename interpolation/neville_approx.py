@@ -12,6 +12,7 @@ def get_Neville(table_points):
     return lambda x: P_ij(x, 0, n, table_points)
 
 table_points =[]
+# table_points = [ (8.1, 16.9446), (8.3, 17.56492), (8.6, 18.50515), (8.7, 18.82091) ]
 print("Enter number of table points=")
 n=int(input())
 for i in range(n):

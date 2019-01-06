@@ -18,7 +18,7 @@ class Point:
         self.x = tup[0]
         self.y = tup[1]
     def __repr__(self):
-        return f"(x:{self.x},y:{self.y})"
+        return "(x:{self.x},y:{self.y})"
 
 
 def route_function(ranges,functions):

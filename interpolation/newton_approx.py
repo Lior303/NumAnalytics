@@ -18,12 +18,14 @@ def get_Poly(x, table_points):
     sum=0
     for i in range(n):
         sum+=get_var(i, table_points, x)
+        print("Current sum: {}".format(sum))
     return sum
 
 def get_Newton_Polynomial(table_points):
     return lambda x: get_Poly(x, table_points)
 
 table_points =[]
+# table_points = [ (8.1, 16.9446), (8.3, 17.56492), (8.6, 18.50515), (8.7, 18.82091) ]
 print("Enter number of table points=")
 n=int(input())
 for i in range(n):
